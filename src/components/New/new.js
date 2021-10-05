@@ -1,9 +1,13 @@
 import React, { Component } from 'react'
+import './style.css'
 
 class New extends Component {
-  constructor(props) {
-    super(props)
-    this.getFuncList = this.getFuncList.bind(this)
+  constructor() {
+    super()
+    this.state = {
+      blogContent: ''
+    }
+    this.blogContentChange = this.blogContentChange.bind(this)
   }
 
   render() {
@@ -26,28 +30,45 @@ class New extends Component {
             <img alt="头像" className="mx-2.5 rounded-full bg-red-300 w-9 h-9" />
           </div>
         </div>
-        <ul className="fixed flex z-20 w-screen h-8 top-16 left-0 bg-gray-100 border-b border-gray-300">
-          {this.getFuncList}
-        </ul>
+        <div 
+          className="
+            fixed flex z-20 w-screen h-8 top-16 left-0 bg-gray-100 border-b 
+            border-gray-300 px-4 py-1">
+          <i className="iconfont icon-13biaoti1" />
+          <i className="iconfont icon-01jiacu" />
+          <i className="iconfont icon-02xieti" />
+          <i className="iconfont icon-double-quotes-l" />
+          <i className="iconfont icon-07lianjie" />
+          <i className="iconfont icon-tupian" />
+          <i className="iconfont icon-daima" />
+          <i className="iconfont icon-daimakuai" />
+          <i className="iconfont icon-20xiangmufuhao" />
+          <i className="iconfont icon-21bianhaogeshi" />
+          <i className="iconfont icon-04shanchuxian" />
+        </div>
+        <div className="blog-body">
+          <div className="inline-block overflow-hidden w-1/2 h-full border bg-gray-100">
+            <textarea 
+              className="blog-edit p-5 h-full w-full bg-gray-100 focus:outline-none"
+              onChange={this.blogContentChange}
+            />
+          </div>
+          <div className="inline-block w-1/2 h-full border overflow-hidden">
+            <div className="blog-preview h-full p-5 pb-7 overflow-auto">{this.state.blogContent}</div>
+          </div>
+          <div className="blog-count fixed h-6  w-screen z-20 bottom-0 left-0 bg-white border-t border-gray-300">
+            <span className="pl-6">字数: </span>
+            <span className="pl-6">行数: </span>
+          </div>
+        </div>
       </div>
     )
   }
 
-  getFuncList() {
-    const funcList = ['icon-13biaoti1', 'icon-01jiacu', 'icon-02xieti', 'icon-double-quotes-l',
-  'icon-07lianjie', 'icon-tupian', 'icon-daima', 'icon-daimakuai', 'icon-20xiangmufuhao',
-  'icon-21bianhaogeshi', 'icon-04shanchuxian'
-  ]
-  return funcList.map((item, index) => {
-    return (
-      <li>
-        {
-          
-        }
-        <i className="iconfont `${item[index]}`"/>
-      </li>
-    )
-  })
+  blogContentChange(e) {
+    this.setState({
+      blogContent: e.target.value
+    })
   }
 }
 

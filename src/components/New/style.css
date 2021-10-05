@@ -1,0 +1,25 @@
+.iconfont {
+  line-height: 1.5rem;
+  font-size: 1.6rem;
+  --tw-text-opacity: 1;
+  color: rgba(107, 114, 128, var(--tw-text-opacity));
+  margin-left: 1rem;
+  cursor: pointer;
+}
+.iconfont.icon-qiehuan {
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.blog-body {
+  height: calc(100vh - 6rem);
+  margin-top: 6rem;
+}
+.blog-edit {
+  height: calc(100% - 2.5rem);
+  resize: none;
+}
+.blog-count {
+  font-size: 0.8rem;
+  line-height: 1.35rem;
+}

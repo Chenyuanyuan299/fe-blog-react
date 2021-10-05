@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import store from '../../store/index'
 import moment from 'moment'
 import axios from 'axios'
 import './style.css'
@@ -9,7 +10,9 @@ class Admin extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      list: []
+      list: [],
+      showLogin: false,
+      isLogin: false
     }
     this.handleToNew = this.handleToNew.bind(this)
   }
@@ -18,9 +21,20 @@ class Admin extends Component {
     axios.get('/api/blog/list')
     .then((res) => {
       const resData  = res.data
+      const message = resData.message
       this.setState({
         list: [...resData.data]
       })
+      const isLogin = true
+      if (message === '已登录') {
+        store.dispatch({
+          type: 'LOGIN_STATE',
+          isLogin
+        })
+        this.setState({
+          isLogin: true
+        })
+      }
     })
     .catch(() => {
       alert('数据获取失败')
@@ -31,16 +45,11 @@ class Admin extends Component {
     return (
       <div>
         <Header></Header>
-        {/*<Login></Login>*/}
+        { this.state.showLogin ? (<Login history={this.props.history} />) : null }
         <div className="blog-wrapper flex items-start mt-20 px-4 mx-auto">
           <div className="blog-list flex-auto">
             <ul className="w-full">
               {this.getBlogList()}
-              <li className="h-20">123</li>
-              <li className="h-20">123</li>
-              <li className="h-20">123</li>
-              <li className="h-20">123</li>
-              <li className="h-20">123</li>
             </ul>
           </div>
           <div className="
@@ -71,10 +80,10 @@ class Admin extends Component {
               <li>3</li>
             </ul>
             <div 
-            className="
-              mx-12 my-6 py-1 text-base cursor-pointer text-center rounded-md shadow
-              transition duration-500 ease-in-out hover:text-blue-500 transform hover:scale-105
-            "
+              className="
+                mx-12 my-6 py-1 text-base cursor-pointer text-center rounded-md shadow
+                transition duration-500 ease-in-out hover:text-blue-500 transform hover:scale-105
+              "
               onClick={this.handleToNew}
             >
               新建博客
@@ -93,23 +102,32 @@ class Admin extends Component {
             mb-5 p-4 rounded-lg shadow bg-white overflow-hidden cursor-pointer
             transition duration-500 ease-in-out hover:shadow-lg transform hover:-translate-y-0.5 hover:scale-105
           "
-          key={item.id}
+          key={item._id}
         >
           <div className="blog-title inline-block mx-3 relative py-1">
             {item.title}
           </div>
           <div className="px-2 my-1">
-            <i className="iconfont icon-my-fill mr-4">
+            <i 
+              className="iconfont icon-my-fill mr-4"
+              style={{"fontSize": "1.1rem"}}
+            >
               <span className="text-base ml-1">{item.author}</span>
             </i>
-            <i className="iconfont icon-time-fill mr-4">
+            <i
+              className="iconfont icon-time-fill mr-4"
+              style={{"fontSize": "1.1rem"}}
+            >
               <span
                 className="text-base ml-1"
               >
                 {moment(item.createtime).format('YYYY-MM-DD')}
               </span>
             </i>
-            <i className="iconfont icon-news-hot-fill mr-4">
+            <i
+              className="iconfont icon-news-hot-fill mr-4"
+              style={{"fontSize": "1.1rem"}}
+            >
               <span
                 className="text-base ml-1"
               >
@@ -123,7 +141,14 @@ class Admin extends Component {
   }
 
   handleToNew() {
-    this.props.history.push('/new');
+    console.log(this.state.isLogin)
+    if (!this.state.isLogin) {
+      this.setState({
+        showLogin: true
+      })
+    } else {
+      this.props.history.push('/new');
+    }
   }
 }
 
