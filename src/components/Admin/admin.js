@@ -5,6 +5,8 @@ import axios from 'axios'
 import './style.css'
 import Header from '../Header/Header'
 import Login from '../Login/login'
+import User from './user'
+import Time from './time'
 
 class Admin extends Component {
   constructor(props) {
@@ -12,7 +14,9 @@ class Admin extends Component {
     this.state = {
       list: [],
       showLogin: false,
-      isLogin: false
+      isLogin: false,
+      admin: '',
+      listCount: 0
     }
     this.handleToNew = this.handleToNew.bind(this)
   }
@@ -20,10 +24,13 @@ class Admin extends Component {
   componentDidMount () {
     axios.get('/api/blog/list')
     .then((res) => {
-      const resData  = res.data
+      console.log(res)
+      const resData  = res.data.data
       const message = resData.message
       this.setState({
-        list: [...resData.data]
+        list: [...resData.listData],
+        admin: resData.realname,
+        listCount: resData.count
       })
       const isLogin = true
       if (message === '已登录') {
@@ -44,7 +51,7 @@ class Admin extends Component {
   render() {
     return (
       <div>
-        <Header></Header>
+        <Header isLogin={this.state.isLogin}></Header>
         { this.state.showLogin ? (<Login history={this.props.history} />) : null }
         <div className="blog-wrapper flex items-start mt-20 px-4 mx-auto">
           <div className="blog-list flex-auto">
@@ -56,22 +63,25 @@ class Admin extends Component {
             blog-admin sticky top-14 w-80 h-auto ml-6 px-4 rounded-lg shadow bg-white overflow-hidden
             transition duration-500 ease-in-out hover:shadow-lg
           ">
-            <div className="pb-8 border-b border-gray-300">
-              <img className="mx-auto mt-8 mb-4 w-24 h-24 rounded-full bg-red-400" alt="头像"/>
-              <h3 className="text-center font-medium my-2">username</h3>
-              <div className="flex w-4/5 mx-auto mb-4"> 
-                <div className="text-center flex-1 border-r border-black">
-                  <h3>8</h3>
-                  <h6>文章</h6>
-                </div>
-                <div className="text-center flex-1">
-                  <h3>10</h3>
-                  <h6>标签</h6>
-                </div>
+            { this.state.isLogin === true ? ( 
+              <User 
+                realname={this.state.admin} 
+                count={this.state.listCount}
+              />
+            ) : 
+              <div className="text-lg text-blue-900 text-center py-4 border-b border-gray-300">
+                <i 
+                  className="mr-1 iconfont icon-like-round" 
+                  style={{"fontSize": "1.2rem", "cursor": "default"}}  
+                />
+                <Time />
               </div>
-            </div>
+            }
             <div className="my-3">
-              <i className="iconfont icon-news-hot-fill" />
+              <i 
+                className="iconfont icon-fenlei" 
+                style={{"fontSize": "1.1rem"}}  
+              />
               <span className="ml-1">分类</span>
             </div>
             <ul>
@@ -121,7 +131,7 @@ class Admin extends Component {
               <span
                 className="text-base ml-1"
               >
-                {moment(item.createtime).format('YYYY-MM-DD')}
+                {moment(item.createdAt).format('YYYY-MM-DD')}
               </span>
             </i>
             <i
@@ -141,7 +151,6 @@ class Admin extends Component {
   }
 
   handleToNew() {
-    console.log(this.state.isLogin)
     if (!this.state.isLogin) {
       this.setState({
         showLogin: true

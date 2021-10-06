@@ -6,7 +6,7 @@ class Login extends Component {
     super(props);
     this.state ={
       username: '',
-      password: ''
+      password: '',
     }
     this.handleUsernameChange = this.handleUsernameChange.bind(this)
     this.handlePasswordChange = this.handlePasswordChange.bind(this)
@@ -67,8 +67,17 @@ class Login extends Component {
       username,
       password
     }
-    if (!data.username || !data.password) {
+    if (!data.username && !data.password) {
       alert('账号密码不能为空！')
+      return 
+    }
+    if (!data.username) {
+      alert('账号不能为空！')
+      return 
+    }
+    if (!data.password) {
+      alert('密码不能为空！')
+      return
     }
     axios.post('/api/user/login', data).then(res => {
       if (res.status === 200 && res.data.errno === 0) {
