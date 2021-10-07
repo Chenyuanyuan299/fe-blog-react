@@ -1,17 +1,27 @@
 import React from 'react'
+import store from '../../store'
 import axios from 'axios'
 import { withRouter } from 'react-router-dom'
 
 const Header = (props) => {
+  // 返回首页
   const handleClick = () => {
     props.history.push('/');
   }
   // const handleInputChange = (e) => {
 
   // }
+  // 退出登录
   const handleLogoutClick = () => {
     axios.get('/api/user/logout')
       .then(() => {
+        const loginState = false
+        const admin = ''
+        store.dispatch({
+          type: 'LOGIN_STATE',
+          loginState,
+          admin
+        })
         if (props.match.path === '/') {
           const { handleLogout } = props
           handleLogout()

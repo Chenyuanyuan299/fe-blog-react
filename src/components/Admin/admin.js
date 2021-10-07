@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import store from '../../store/index'
+import React, { useState, useEffect } from 'react'
+import store from '../../store'
 import moment from 'moment'
 import axios from 'axios'
 import './style.css'
@@ -8,132 +8,41 @@ import Login from '../Login/login'
 import User from './user'
 import Time from './time'
 
-class Admin extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      list: [],
-      showLogin: false,
-      isLogin: false,
-      admin: '',
-      listCount: 0
-    }
-    this.handleToNew = this.handleToNew.bind(this)
-    this.handleToDetail = this.handleToDetail.bind(this)
-    this.handleLoginClick = this.handleLoginClick.bind(this)
-    this.handleLogout = this.handleLogout.bind(this)
-    this.showLoginChange = this.showLoginChange.bind(this)
-  }
-
-  getHomeData() {
+const Admin = (props) => {
+  const [ list, setList ] = useState([])
+  const [ isLogin, setIsLogin ] = useState(false)
+  const [ showLogin, setShowLogin ] = useState(false)
+  const [ admin, setAdmin ] = useState('')
+  const [ listCount, setListCount ] = useState(0)
+  const getHomeData = () => {
     axios.get('/api/blog/list')
     .then((res) => {
       const resData  = res.data.data
       const message = resData.message
-      this.setState({
-        list: [...resData.listData],
-        admin: resData.realname,
-        listCount: resData.count
-      })
-      const isLogin = true
+      setList(resData.listData)
+      setAdmin(resData.realname)
+      setListCount(resData.count)
       if (message === '已登录') {
+        const loginState = true
         store.dispatch({
           type: 'LOGIN_STATE',
-          isLogin
+          loginState,
+          admin
         })
-        this.setState({
-          isLogin: true
-        })
+        setIsLogin(true)
       }
     })
     .catch(() => {
       alert('数据获取失败')
     })
   }
-  componentDidMount () {
-    this.getHomeData()
-  }
+  useEffect(() => {
+    getHomeData()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-  render() {
-    return (
-      <div>
-        { 
-          this.state.isLogin ? (
-            <Header 
-              realname={this.state.admin} 
-              history={this.props.history} 
-              handleLogout={this.handleLogout}
-            />
-          ) : ( 
-            <div className="fixed z-20 w-screen h-14 top-0 left-0 shadow bg-white">
-              <div className="text-center h-full w-28 float-right mr-60">
-                <button 
-                  className="mt-3 h-8 w-20 border-2 border-blue-400 rounded-xl cursor-pointer focus:bg-blue-100"
-                  onClick={this.handleLoginClick}
-                >
-                  登 录
-                </button> 
-              </div>
-            </div>
-          )
-        }
-        { this.state.showLogin ? (<Login showLoginChange={this.showLoginChange}/>) : null }
-        <div className="blog-wrapper flex items-start mt-20 px-4 mx-auto">
-          <div className="blog-list flex-auto">
-            <ul className="w-full">
-              {this.getBlogList()}
-            </ul>
-          </div>
-          <div className="
-            blog-admin sticky top-14 w-80 h-auto ml-6 px-4 rounded-lg shadow bg-white overflow-hidden
-            transition duration-500 ease-in-out hover:shadow-lg
-          "
-          >
-            { 
-              this.state.isLogin === true ? ( 
-                <User 
-                  realname={this.state.admin} 
-                  count={this.state.listCount}
-                />
-              ) : (
-                <div className="text-lg text-blue-900 text-center py-4 border-b border-gray-300">
-                  <i 
-                    className="mr-1 iconfont icon-like-round" 
-                    style={{"fontSize": "1.2rem"}}  
-                  />
-                  <Time />
-                </div>
-              )
-            }
-            <div className="my-3">
-              <i 
-                className="iconfont icon-fenlei" 
-                style={{"fontSize": "1.1rem"}}  
-              />
-              <span className="ml-1">分类</span>
-            </div>
-            <ul>
-              <li>1</li>
-              <li>2</li>
-              <li>3</li>
-            </ul>
-            <div 
-              className="
-                mx-12 my-6 py-1 text-base cursor-pointer text-center rounded-md shadow
-                transition duration-500 ease-in-out hover:text-blue-500 transform hover:scale-105
-              "
-              onClick={this.handleToNew}
-            >
-              新建博客
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  getBlogList() {
-    return this.state.list.map((item, index) => {
+  const getBlogList = () => {
+    return list.map((item, index) => {
       return ( 
         <li
           className="
@@ -141,7 +50,7 @@ class Admin extends Component {
             transition duration-500 ease-in-out hover:shadow-lg transform hover:-translate-y-0.5 hover:scale-105
           "
           key={item._id}
-          onClick={() => {this.handleToDetail(index)}}
+          onClick={() => {handleToDetail(index)}}
         >
           <div className="blog-title inline-block mx-3 relative py-1">
             {item.title}
@@ -179,42 +88,108 @@ class Admin extends Component {
     })
   }
 
-  handleToNew() {
-    if (!this.state.isLogin) {
-      this.setState({
-        showLogin: true
-      })
+  const handleToNew = () => {
+    if (!isLogin) {
+      setShowLogin(true)
     } else {
-      this.props.history.push('/new');
+      props.history.push('/new');
     }
   }
-  handleToDetail(index) {
-    this.props.history.push({
+  const handleToDetail = (index) => {
+    props.history.push({
       pathname:'/detail/'+index, 
       state: {
-        data: this.state.list[index],
-        isLogin: this.state.isLogin,
-        admin: this.state.admin
+        data: list[index]
       }
     });
   }
-  handleLoginClick() {
-    this.setState({
-      showLogin: true
-    })
+  const handleLoginClick = () => {
+    setShowLogin(true)
   }
-  showLoginChange() {
-    this.setState({
-      showLogin: false
-    })
-    this.getHomeData()
+  const handleShowLogin = () => {
+    setShowLogin(false)
+    getHomeData()
   }
-  handleLogout() {
-    this.setState({
-      isLogin: false
-    })
-    this.getHomeData()
+  const handleLogout = () => {
+    setIsLogin(false)
+    getHomeData()
   }
+
+  return (
+    <div>
+      { 
+        isLogin ? (
+          <Header 
+            realname={admin} 
+            history={props.history} 
+            handleLogout={handleLogout}
+          />
+        ) : ( 
+          <div className="fixed z-20 w-screen h-14 top-0 left-0 shadow bg-white">
+            <div className="text-center h-full w-28 float-right mr-60">
+              <button 
+                className="mt-3 h-8 w-20 border-2 border-blue-400 rounded-xl cursor-pointer focus:bg-blue-100"
+                onClick={handleLoginClick}
+              >
+                登 录
+              </button> 
+            </div>
+          </div>
+        )
+      }
+      { showLogin ? (<Login handleShowLogin={handleShowLogin}/>) : null }
+      <div className="blog-wrapper flex items-start mt-20 px-4 mx-auto">
+        <div className="blog-list flex-auto">
+          <ul className="w-full">
+            {getBlogList()}
+          </ul>
+        </div>
+        <div className="
+          blog-admin sticky top-14 w-80 h-auto ml-6 px-4 rounded-lg shadow bg-white overflow-hidden
+          transition duration-500 ease-in-out hover:shadow-lg
+        "
+        >
+          { 
+            isLogin === true ? ( 
+              <User 
+                realname={admin} 
+                count={listCount}
+              />
+            ) : (
+              <div className="text-lg text-blue-900 text-center py-4 border-b border-gray-300">
+                <i 
+                  className="mr-1 iconfont icon-like-round" 
+                  style={{"fontSize": "1.2rem"}}  
+                />
+                <Time />
+              </div>
+            )
+          }
+          <div className="my-3">
+            <i 
+              className="iconfont icon-fenlei" 
+              style={{"fontSize": "1.1rem"}}  
+            />
+            <span className="ml-1">分类</span>
+          </div>
+          <ul>
+            <li>1</li>
+            <li>2</li>
+            <li>3</li>
+          </ul>
+          <div 
+            className="
+              mx-12 my-6 py-1 text-base cursor-pointer text-center rounded-md shadow
+              transition duration-500 ease-in-out hover:text-blue-500 transform hover:scale-105
+            "
+            onClick={handleToNew}
+          >
+            新建博客
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export default Admin

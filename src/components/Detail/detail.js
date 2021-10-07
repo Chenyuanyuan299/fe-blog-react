@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react'
+import store from '../../store'
 import axios from 'axios'
 import moment from 'moment'
 import Header from '../Header/Header'
 import Login from '../Login/login'
 
 const Detail = (props) => {
-  const state = props.location.state
-  console.log('state:', state)
+  const id = props.location.state.data._id
   const [data, setData] = useState(null);
-  const id = state.data._id
+  const loginState = store.getState().loginState
+  const admin = store.getState().admin
 
   useEffect(() => {
     const url = '/api/blog/detail?id=' + id
@@ -25,9 +26,9 @@ const Detail = (props) => {
   return ( 
     <>
       { 
-        state.isLogin ? (
+        loginState ? (
           <Header 
-            realname={state.admin} 
+            realname={admin} 
             history={props.history} 
           />
         ) : ( 

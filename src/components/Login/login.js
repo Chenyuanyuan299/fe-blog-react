@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
+import store from '../../store'
 import axios from 'axios'
 
 const useLogin = (props) => {
   const [ username, setUsername ] = useState('')
   const [ password, setPassword ] = useState('')
-  const [ loginState, setLoginState ] = useState(false)
 
   const { handleShowLogin } = props
   const handleLogin = () => {
@@ -23,8 +23,14 @@ const useLogin = (props) => {
     }
     axios.post('/api/user/login', data).then(res => {
       if (res.status === 200 && res.data.errno === 0) {
+        const loginState = true
+        const admin = res.data.message
+        store.dispatch({
+          type: 'LOGIN_STATE',
+          loginState,
+          admin
+        })
         alert('登录成功！')
-        setLoginState(true)
         handleShowLogin()
       } else {
         alert('密码错误')
@@ -32,10 +38,21 @@ const useLogin = (props) => {
     })
   }
 
+  const closeLogin = () => {
+    handleShowLogin()
+  }
+
   return ( 
     <div className="fixed flex inset-0 justify-center items-center z-50 bg-gray-500 bg-opacity-50">
       <div className="bg-white w-80 max-w-full h-80 rounded-lg p-5">
-        <div className="text-center text-5xl my-5 text-blue-500">Login</div>
+        <div className="text-center my-5">
+          <i 
+            style={{"fontSize": "1.2rem"}} 
+            className="iconfont icon-close float-right mr-4"
+            onClick={closeLogin}
+          />
+          <span className="ml-12 text-5xl text-blue-500">Login</span>
+        </div>
         <div className="mx-4 mt-8 mb-6">
           <div className="mb-4 py-1.5 border border-blue-400 rounded-lg">
             <i style={{"fontSize": "1rem"}} className="iconfont icon-zhanghao mr-2"/>
