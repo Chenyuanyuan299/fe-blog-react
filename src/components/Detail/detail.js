@@ -1,14 +1,26 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 import moment from 'moment'
 import Header from '../Header/Header'
 import Login from '../Login/login'
 
 const Detail = (props) => {
   const state = props.location.state
-  let showLogin = false
-  const handleLogin = () => {
-    console.log(showLogin)
-    showLogin = true
+  console.log('state:', state)
+  const [data, setData] = useState(null);
+  const id = state.data._id
+
+  useEffect(() => {
+    const url = '/api/blog/detail?id=' + id
+    axios.get(url).then(res => {
+      const resData = res.data.data
+      setData(resData)
+    })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  const [ showLogin, setShowLogin ] = useState(false)
+  const handleShowLogin = () => {
+    setShowLogin(false)
   }
   return ( 
     <>
@@ -23,31 +35,31 @@ const Detail = (props) => {
             <div className="text-center h-full w-28 float-right mr-60">
               <button 
                 className="mt-3 h-8 w-20 border-2 border-blue-400 rounded-xl cursor-pointer focus:bg-blue-100"
-                onClick={handleLogin}
+                onClick={() => setShowLogin(true)}
               >
                 登 录
               </button> 
-              { showLogin ? (<Login />) : null }
+              { showLogin ? (<Login handleShowLogin={handleShowLogin}/>) : null }
             </div>
           </div>
         )
       }
       <div className="mt-16 mx-auto text-left">
         <div className="px-52 py-5">
-          <div className="text-3xl my-5 ml-6">{state.data.title}</div>
+          <div className="text-3xl my-5 ml-6">{ data?.title }</div>
           <div className="px-2 my-1">
             <i 
               className="iconfont icon-my-fill mr-4"
               style={{"fontSize": "1.1rem"}}
             >
-              <span className="text-base ml-1">{state.data.author}</span>
+              <span className="text-base ml-1">{ data?.author }</span>
             </i>
             <i
               className="iconfont icon-time-fill mr-4"
               style={{"fontSize": "1.1rem"}}
             >
               <span className="text-base ml-1">
-                {moment(state.data.createdAt).format('YYYY-MM-DD')}
+                {moment(data?.createdAt).format('YYYY-MM-DD')}
               </span>
             </i>
             <i
@@ -60,7 +72,7 @@ const Detail = (props) => {
         </div>
         <div className="px-52 py-6">
           <div className="px-6">
-            {state.data.content}
+            { data?.content }
           </div>
         </div>
       </div>
