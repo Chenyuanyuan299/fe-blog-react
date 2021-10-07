@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
 import axios from 'axios'
 class Login extends Component {
   constructor(props) {
@@ -20,7 +19,7 @@ class Login extends Component {
           <div className="text-center text-5xl my-5 text-blue-500">Login</div>
           <div className="mx-4 mt-8 mb-6">
             <div className="mb-4 py-1.5 border border-blue-400 rounded-lg">
-              <i style={{"fontSize": "1rem", "cursor": "default"}} className="iconfont icon-zhanghao mr-2"/>
+              <i style={{"fontSize": "1rem"}} className="iconfont icon-zhanghao mr-2"/>
               <input 
                 placeholder="请输入账号"
                 className="h-6 w-48 text-base focus:outline-none"
@@ -28,7 +27,7 @@ class Login extends Component {
               />
             </div>
             <div className="mb-6 py-1.5 border border-blue-400 rounded-lg">
-              <i style={{"fontSize": "1rem", "cursor": "default"}} className="iconfont icon-mima mr-2"/> 
+              <i style={{"fontSize": "1rem"}} className="iconfont icon-mima mr-2"/> 
               <input 
                 placeholder="请输入密码"
                 type="password"
@@ -63,6 +62,7 @@ class Login extends Component {
   handleLogin() {
     const username = this.state.username
     const password = this.state.password
+    const { showLoginChange } = this.props
     const data = {
       username,
       password
@@ -81,11 +81,12 @@ class Login extends Component {
     }
     axios.post('/api/user/login', data).then(res => {
       if (res.status === 200 && res.data.errno === 0) {
-        this.props.history.push('/new');
+        alert('登录成功！')
+        showLoginChange()
       } else {
         alert('密码错误')
       }
     })
   }
 }
-export default withRouter(Login)
+export default Login

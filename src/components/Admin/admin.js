@@ -19,12 +19,15 @@ class Admin extends Component {
       listCount: 0
     }
     this.handleToNew = this.handleToNew.bind(this)
+    this.handleToDetail = this.handleToDetail.bind(this)
+    this.handleLoginClick = this.handleLoginClick.bind(this)
+    this.handleLogout = this.handleLogout.bind(this)
+    this.showLoginChange = this.showLoginChange.bind(this)
   }
 
-  componentDidMount () {
+  getHomeData() {
     axios.get('/api/blog/list')
     .then((res) => {
-      console.log(res)
       const resData  = res.data.data
       const message = resData.message
       this.setState({
@@ -47,12 +50,34 @@ class Admin extends Component {
       alert('数据获取失败')
     })
   }
+  componentDidMount () {
+    this.getHomeData()
+  }
 
   render() {
     return (
       <div>
-        <Header isLogin={this.state.isLogin}></Header>
-        { this.state.showLogin ? (<Login history={this.props.history} />) : null }
+        { 
+          this.state.isLogin ? (
+            <Header 
+              realname={this.state.admin} 
+              history={this.props.history} 
+              handleLogout={this.handleLogout}
+            />
+          ) : ( 
+            <div className="fixed z-20 w-screen h-14 top-0 left-0 shadow bg-white">
+              <div className="text-center h-full w-28 float-right mr-60">
+                <button 
+                  className="mt-3 h-8 w-20 border-2 border-blue-400 rounded-xl cursor-pointer focus:bg-blue-100"
+                  onClick={this.handleLoginClick}
+                >
+                  登 录
+                </button> 
+              </div>
+            </div>
+          )
+        }
+        { this.state.showLogin ? (<Login showLoginChange={this.showLoginChange}/>) : null }
         <div className="blog-wrapper flex items-start mt-20 px-4 mx-auto">
           <div className="blog-list flex-auto">
             <ul className="w-full">
@@ -62,20 +87,23 @@ class Admin extends Component {
           <div className="
             blog-admin sticky top-14 w-80 h-auto ml-6 px-4 rounded-lg shadow bg-white overflow-hidden
             transition duration-500 ease-in-out hover:shadow-lg
-          ">
-            { this.state.isLogin === true ? ( 
-              <User 
-                realname={this.state.admin} 
-                count={this.state.listCount}
-              />
-            ) : 
-              <div className="text-lg text-blue-900 text-center py-4 border-b border-gray-300">
-                <i 
-                  className="mr-1 iconfont icon-like-round" 
-                  style={{"fontSize": "1.2rem", "cursor": "default"}}  
+          "
+          >
+            { 
+              this.state.isLogin === true ? ( 
+                <User 
+                  realname={this.state.admin} 
+                  count={this.state.listCount}
                 />
-                <Time />
-              </div>
+              ) : (
+                <div className="text-lg text-blue-900 text-center py-4 border-b border-gray-300">
+                  <i 
+                    className="mr-1 iconfont icon-like-round" 
+                    style={{"fontSize": "1.2rem"}}  
+                  />
+                  <Time />
+                </div>
+              )
             }
             <div className="my-3">
               <i 
@@ -105,7 +133,7 @@ class Admin extends Component {
   }
 
   getBlogList() {
-    return this.state.list.map((item) => {
+    return this.state.list.map((item, index) => {
       return ( 
         <li
           className="
@@ -113,6 +141,7 @@ class Admin extends Component {
             transition duration-500 ease-in-out hover:shadow-lg transform hover:-translate-y-0.5 hover:scale-105
           "
           key={item._id}
+          onClick={() => {this.handleToDetail(index)}}
         >
           <div className="blog-title inline-block mx-3 relative py-1">
             {item.title}
@@ -158,6 +187,33 @@ class Admin extends Component {
     } else {
       this.props.history.push('/new');
     }
+  }
+  handleToDetail(index) {
+    this.props.history.push({
+      pathname:'/detail/'+index, 
+      state: {
+        data: this.state.list[index],
+        isLogin: this.state.isLogin,
+        admin: this.state.admin
+      }
+    });
+  }
+  handleLoginClick() {
+    this.setState({
+      showLogin: true
+    })
+  }
+  showLoginChange() {
+    this.setState({
+      showLogin: false
+    })
+    this.getHomeData()
+  }
+  handleLogout() {
+    this.setState({
+      isLogin: false
+    })
+    this.getHomeData()
   }
 }
 

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import axios from 'axios'
 import './style.css'
 
 class New extends Component {
@@ -8,6 +9,7 @@ class New extends Component {
       blogContent: ''
     }
     this.blogContentChange = this.blogContentChange.bind(this)
+    this.handleSendClick = this.handleSendClick.bind(this)
   }
 
   render() {
@@ -21,9 +23,12 @@ class New extends Component {
           />
           <div className="flex items-center justify-center">
             <button 
-              className="mx-2.5 w-16 h-8 text-center text-white bg-blue-500 rounded-sm
-              transition duration-100 hover:bg-opacity-80
-            ">
+              className="
+                mx-2.5 w-16 h-8 text-center text-white bg-blue-500 rounded-sm
+                transition duration-100 hover:bg-opacity-80
+              "
+              onClick={this.handleSendClick}
+            >
               发布
             </button>
             <i className="iconfont icon-qiehuan mx-2.5 text-xl text-center"></i>
@@ -69,6 +74,10 @@ class New extends Component {
     this.setState({
       blogContent: e.target.value
     })
+  }
+  
+  handleSendClick() {
+    axios.post('/')
   }
 }
 
