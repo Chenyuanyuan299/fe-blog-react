@@ -22,9 +22,10 @@ const useLogin = (props) => {
       return
     }
     axios.post('/api/user/login', data).then(res => {
-      if (res.status === 200 && res.data.errno === 0) {
+      const resData = res.data
+      if (res.status === 200 && resData.errno === 0) {
         const loginState = true
-        const admin = res.data.message
+        const admin = resData.message
         store.dispatch({
           type: 'LOGIN_STATE',
           loginState,
@@ -32,8 +33,10 @@ const useLogin = (props) => {
         })
         alert('登录成功！')
         handleShowLogin()
+      } else if(resData.errno === -1 && resData.message === '用户不存在') {
+        alert('用户不存在！')
       } else {
-        alert('密码错误')
+        alert('密码错误！')
       }
     })
   }
