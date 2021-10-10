@@ -1,4 +1,5 @@
 import React from 'react'
+import moment from 'moment'
 
 const Time = (props) => {
   const time = new Date()
@@ -14,7 +15,10 @@ const Time = (props) => {
     msg = '晚上好！'
   }
   return( 
-    <span>{msg}</span>
+    <>
+      <span>{msg}</span>
+      <span className="block">今天是 {moment(new Date()).format('YYYY年MM月DD日')}</span>
+    </>
   )
 }
 

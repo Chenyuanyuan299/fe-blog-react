@@ -103,6 +103,9 @@ const Admin = (props) => {
       }
     });
   }
+  const handleToEdit = () => {
+    props.history.push('/edit');
+  }
   const handleLoginClick = () => {
     setShowLogin(true)
   }
@@ -179,13 +182,26 @@ const Admin = (props) => {
           </ul>
           <div 
             className="
-              mx-12 my-6 py-1 text-base cursor-pointer text-center rounded-md shadow
+              mx-12 mt-6 mb-4 py-1 text-base cursor-pointer text-center rounded-md shadow
               transition duration-500 ease-in-out hover:text-blue-500 transform hover:scale-105
             "
             onClick={handleToNew}
           >
             新建博客
           </div>
+          { 
+            isLogin === true ? ( 
+              <div 
+                className="
+                  mx-12 mb-6 mt-4 py-1 text-base cursor-pointer text-center rounded-md shadow
+                  transition duration-500 ease-in-out hover:text-blue-500 transform hover:scale-105
+                "
+                onClick={handleToEdit}
+              >
+                编辑我的博客
+              </div>
+            ) : null
+          }
         </div>
       </div>
     </div>

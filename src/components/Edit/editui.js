@@ -1,58 +1,70 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import './style.css'
 
-const New = (props) => {
+const EditUI = (props) => {
+  const data = props.location.state.data
+  const id = props.location.state.data._id
   const [ title, setTitle ] = useState('')
   const [ content, setContent ] = useState('')
 
+  useEffect(() => {
+    setTitle(data.title)
+    setContent(data.content)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   // 使用 axios 请求发送 blog
-  const handleSendBlog = () => {
+  const handleUpdateBlog = () => {
     if (!title || !content) {
       alert('标题或内容不能为空！')
     }
     const data = { title, content }
-    axios.post('/api/blog/new', data).then(res => {
+    const url = '/api/blog/update?id=' + id
+    axios.post(url, data).then(res => {
+      console.log(res)
       if (res.status === 200 && res.data.errno === 0) {
         setTimeout(() => {
           props.history.push('/')
         }, 1000)
-        alert('发布成功！即将自动返回首页...')
+        alert('更新成功！即将自动返回首页...')
       }
     })
-  }
-  // 监听内容输入的变化，使用了节流
-  const contentChange = (e) => {
-    setContent(e.target.value)
   }
   // 监听标题输入的变化，使用了防抖
   const titleChange = (e) => {
     setTitle(e.target.value)
   }
+  // 监听内容输入的变化，使用了节流
+  const contentChange =(e) => {
+    // console.log(e[0].target.defaultValue)
+    console.log(e)
+    setContent(e.target.value)
+  }
+
   // 防抖
-  const debounce = (fn, delay) => {
-    let timer
-    return function() {
-      clearTimeout(timer)
-      timer = setTimeout(() => {
-        fn.apply(this, arguments)
-      }, delay)
-    }
-  }
-  // 节流
-  const throttle = (fn, delay) => {
-    let flag = true
-    return function() {
-      if (!flag) {
-        return false
-      }
-      flag = false
-      setTimeout(() => {
-        fn.apply(this, arguments)
-        flag = true
-      }, delay)
-    }
-  }
+  // const debounce = (fn, delay) => {
+  //   console.log('正常')
+  //   let timer
+  //   return function(...args) {
+  //     const that = this
+  //     // 如果已经设定过定时器就清空
+  //     if (timer) {
+  //       clearTimeout(timer)
+  //     }
+  //     // 开始一个新的定时器，延迟用户行为
+  //     timer = setTimeout(() => {
+  //       fn.apply(that, args)
+  //       console.log('this', this, 'args', args)
+  //       // fn.apply(null, param)
+  //     }, delay)
+  //   }
+  // }
+
+  // const debounce = (fn, delay) => {
+  //   let timer
+  //   let context = this
+  //   let params = args
+  // }
 
   return ( 
     <div>
@@ -61,7 +73,8 @@ const New = (props) => {
           maxLength="80" 
           placeholder="输入文章标题..." 
           className="focus:outline-none h-full ml-4 text-2xl flex-auto"
-          onChange={debounce(titleChange, 1000)} 
+          value={title}
+          onChange={titleChange}
         />
         <div className="flex items-center justify-center">
           <button 
@@ -69,7 +82,7 @@ const New = (props) => {
               mx-2.5 w-16 h-8 text-center text-white bg-blue-500 rounded-sm
               transition duration-100 hover:bg-opacity-80
             "
-            onClick={handleSendBlog}
+            onClick={handleUpdateBlog}
           >
             发布
           </button>
@@ -95,9 +108,10 @@ const New = (props) => {
       </div>
       <div className="blog-body">
         <div className="inline-block overflow-hidden w-1/2 h-full border bg-gray-100">
-          <textarea 
+          <textarea
             className="blog-edit p-5 h-full w-full bg-gray-100 focus:outline-none"
-            onChange={throttle(contentChange, 300)}
+            onChange={contentChange}
+            value={content}
           />
         </div>
         <div className="inline-block w-1/2 h-full border overflow-hidden">
@@ -112,4 +126,4 @@ const New = (props) => {
   )
 }
 
-export default New
+export default EditUI
