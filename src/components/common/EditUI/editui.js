@@ -8,7 +8,7 @@ const EditUI = (props) => {
           maxLength="80" 
           placeholder="输入文章标题..." 
           className="focus:outline-none h-full ml-4 text-2xl flex-auto"
-          onChange={props.debounce(props.titleChange, 1000)} 
+          onChange={props.debounce(props.titleChange, 500)} 
         />
         <div className="flex items-center justify-center">
           <button 

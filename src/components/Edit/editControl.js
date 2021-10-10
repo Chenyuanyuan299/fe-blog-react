@@ -28,10 +28,25 @@ const EditControl = (props) => {
     });
   }
 
+  const handleDeleteBlog = (id) => {
+    // eslint-disable-next-line no-restricted-globals
+    if (confirm("确认删除这篇博客？")) {
+      const url = '/api/blog/delete?id=' + id
+      axios.post(url).then(res => {
+        if (res.status === 200 && res.data.errno === 0) {
+          getBlogList()
+        }
+      })
+    } else {  
+      alert('删除失败')
+    }
+  }
+
   return ( 
     <EditControlUI 
       list={list}
       handleToEditBlog={handleToEditBlog}
+      handleDeleteBlog={handleDeleteBlog}
     />
   )
 }

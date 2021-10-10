@@ -10,12 +10,37 @@ const EditControlUI = (props) => {
             return ( 
               <li
                 className="
-                  mb-5 p-4 mx-20 rounded-lg shadow bg-white overflow-hidden cursor-pointer
-                  transition duration-500 ease-in-out hover:shadow-lg transform hover:-translate-y-0.5 hover:scale-105
+                  mb-5 p-4 mx-20 rounded-lg shadow bg-white 
+                  overflow-hidden hover:shadow-lg cursor-default
                 "
                 key={item._id}
-                onClick={() => {props.handleToEditBlog(index)}}
               >
+                <div 
+                  className="
+                    w-auto text-center float-right mt-12 border-2 rounded p-0.5 ml-2
+                    cursor-pointer hover:bg-blue-100 focus:bg-blue-100
+                  "
+                  onClick={() => {props.handleDeleteBlog(item._id)}}
+                  >
+                  <i 
+                    className="iconfont icon-delete-fill ml-0"
+                    style={{"fontSize": "1.2rem"}}
+                  />
+                  <span className="ml-1">删除博客</span>
+                </div>
+                <div 
+                  className="
+                    w-auto text-center float-right mt-12 border-2 rounded p-0.5
+                    cursor-pointer hover:bg-blue-100 focus:bg-blue-100
+                  "
+                  onClick={() => {props.handleToEditBlog(index)}}
+                >
+                  <i 
+                    className="iconfont icon-edit ml-0"
+                    style={{"fontSize": "1.2rem"}}
+                  />
+                  <span className="ml-1">编辑博客</span>
+                </div>
                 <div className="blog-title inline-block mx-3 relative py-1">
                   {item.title}
                 </div>
