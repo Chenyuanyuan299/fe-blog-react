@@ -1,39 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import moment from 'moment'
-import axios from 'axios'
 
-const Edit = (props) => {
-  const [ list, setList ] = useState([])
-  const getBlogList = () => {
-    axios.get('/api/blog/list?isadmin=1')
-    .then((res) => {
-      const resData  = res.data.data
-      setList(resData.listData)
-    })
-    .catch(() => {
-      alert('数据获取失败')
-    })
-  }
-  useEffect(() => {
-    getBlogList()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const handleToEditBlog = (index) => {
-    console.log(index)
-    props.history.push({
-      pathname:'/editui/'+index, 
-      state: {
-        data: list[index]
-      }
-    });
-  }
-
+const EditControlUI = (props) => {
   return ( 
     <div className="max-w-screen-lg mx-auto">
       <ul className="w-full">
         { 
-          list.map((item, index) => {
+          props.list.map((item, index) => {
             return ( 
               <li
                 className="
@@ -41,7 +14,7 @@ const Edit = (props) => {
                   transition duration-500 ease-in-out hover:shadow-lg transform hover:-translate-y-0.5 hover:scale-105
                 "
                 key={item._id}
-                onClick={() => {handleToEditBlog(index)}}
+                onClick={() => {props.handleToEditBlog(index)}}
               >
                 <div className="blog-title inline-block mx-3 relative py-1">
                   {item.title}
@@ -83,4 +56,4 @@ const Edit = (props) => {
   )
 }
 
-export default Edit
+export default EditControlUI

@@ -4,8 +4,8 @@ import './style/iconfont.css'
 import Admin from './components/Admin/admin'
 import New from './components/New/new'
 import Detail from './components/Detail/detail'
-import Edit from './components/Edit/edit'
-import EditUI from './components/Edit/editui'
+import EditControl from './components/Edit/editControl'
+import EditBlog from './components/Edit/editBlog'
 
 function App() {
   return (
@@ -14,8 +14,8 @@ function App() {
         <Route exact path="/" component={Admin} />
         <Route exact path="/new" component={New} />
         <Route exact path="/detail/:id" component={Detail}/>
-        <Route exact path="/edit" component={Edit} />
-        <Route exact path="/editui/:id" component={EditUI} />
+        <Route exact path="/editcontrol" component={EditControl} />
+        <Route exact path="/editblog/:id" component={EditBlog} />
       </BrowserRouter>
     </div>
   );

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
+// import EditUI from '../common/EditUI/editui'
 import axios from 'axios'
 
-const EditUI = (props) => {
+const EditBlog = (props) => {
   const data = props.location.state.data
   const id = props.location.state.data._id
   const [ title, setTitle ] = useState('')
@@ -21,7 +22,6 @@ const EditUI = (props) => {
     const data = { title, content }
     const url = '/api/blog/update?id=' + id
     axios.post(url, data).then(res => {
-      console.log(res)
       if (res.status === 200 && res.data.errno === 0) {
         setTimeout(() => {
           props.history.push('/')
@@ -37,34 +37,25 @@ const EditUI = (props) => {
   // 监听内容输入的变化，使用了节流
   const contentChange =(e) => {
     // console.log(e[0].target.defaultValue)
-    console.log(e)
+    console.log(e.target.value)
     setContent(e.target.value)
   }
 
   // 防抖
-  // const debounce = (fn, delay) => {
-  //   console.log('正常')
-  //   let timer
-  //   return function(...args) {
-  //     const that = this
-  //     // 如果已经设定过定时器就清空
-  //     if (timer) {
-  //       clearTimeout(timer)
-  //     }
-  //     // 开始一个新的定时器，延迟用户行为
-  //     timer = setTimeout(() => {
-  //       fn.apply(that, args)
-  //       console.log('this', this, 'args', args)
-  //       // fn.apply(null, param)
-  //     }, delay)
-  //   }
-  // }
-
-  // const debounce = (fn, delay) => {
-  //   let timer
-  //   let context = this
-  //   let params = args
-  // }
+  const debounce = (fn, delay) => {
+    console.log('正常')
+    let timer
+    return function(...args) {
+      // 如果已经设定过定时器就清空
+      if (timer) {
+        clearTimeout(timer)
+      }
+      // 开始一个新的定时器，延迟用户行为
+      timer = setTimeout(() => {
+        fn.apply(this, args)
+      }, delay)
+    }
+  }
 
   return ( 
     <div>
@@ -73,8 +64,8 @@ const EditUI = (props) => {
           maxLength="80" 
           placeholder="输入文章标题..." 
           className="focus:outline-none h-full ml-4 text-2xl flex-auto"
-          value={title}
           onChange={titleChange}
+          value={title}
         />
         <div className="flex items-center justify-center">
           <button 
@@ -110,7 +101,7 @@ const EditUI = (props) => {
         <div className="inline-block overflow-hidden w-1/2 h-full border bg-gray-100">
           <textarea
             className="blog-edit p-5 h-full w-full bg-gray-100 focus:outline-none"
-            onChange={contentChange}
+            onChange={debounce(contentChange, 500)}
             value={content}
           />
         </div>
@@ -126,4 +117,4 @@ const EditUI = (props) => {
   )
 }
 
-export default EditUI
+export default EditBlog

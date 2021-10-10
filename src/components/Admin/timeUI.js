@@ -1,7 +1,7 @@
 import React from 'react'
 import moment from 'moment'
 
-const Time = (props) => {
+const TimeUI = (props) => {
   const time = new Date()
   const hour = time.getHours()
   let msg = ''
@@ -22,4 +22,4 @@ const Time = (props) => {
   )
 }
 
-export default Time
+export default TimeUI

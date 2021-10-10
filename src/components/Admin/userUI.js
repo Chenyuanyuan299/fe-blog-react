@@ -1,7 +1,7 @@
 import React from "react";
-import Time from './time'
+import TimeUI from './timeUI'
 
-const User = (props) => {
+const UserUI = (props) => {
   return ( 
     <>
       <div className="pb-8 border-b border-gray-300">
@@ -14,7 +14,7 @@ const User = (props) => {
           <h3 className="inline text-center font-medium my-2 mr-1">
             {props.realname}
           </h3>
-          <Time />
+          <TimeUI />
         </div>
         <div className="flex w-4/5 mx-auto mb-4"> 
           <div className="text-center flex-1 border-r border-black">
@@ -31,4 +31,4 @@ const User = (props) => {
   )
 }
 
-export default User
+export default UserUI
