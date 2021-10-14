@@ -48,7 +48,7 @@ const DetailUI = (props) => {
               className="iconfont icon-news-hot-fill mr-4"
               style={{"fontSize": "1.1rem"}}
             >
-              <span className="text-base ml-1">标签</span>
+              <span className="text-base ml-1">{ props.data?.label }</span>
             </i>
           </div>
         </div>

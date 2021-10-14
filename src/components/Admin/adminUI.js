@@ -6,6 +6,14 @@ import Login from '../Login/login'
 import moment from 'moment'
 
 const adminUI = (props) => {
+  const randomColor = () => {
+    let color="rgb(";
+    for(let i=0; i<3; i++) {
+      color += parseInt(Math.random()*256)+",";
+    } 
+    color = color.substring(0, color.length-1)+")";
+    return color
+  }
   const getBlogList = () => {
     return props.list.map((item, index) => {
       return ( 
@@ -44,7 +52,7 @@ const adminUI = (props) => {
               <span
                 className="text-base ml-1"
               >
-                标签
+                {item.label}
               </span>
             </i>
           </div>
@@ -89,12 +97,51 @@ const adminUI = (props) => {
         >
           { 
             props.isLogin === true ? ( 
-              <UserUI 
-                realname={props.admin} 
-                count={props.listCount}
-              />
+              <>
+                <UserUI 
+                  realname={props.admin} 
+                  count={props.listCount}
+                  labelCount={props.labelList.length}
+                />
+                <div className="my-3">
+                  <div className="mb-4">
+                    <i 
+                      className="iconfont icon-news-hot-fill" 
+                      style={{"fontSize": "1.1rem"}}  
+                    />
+                    <span className="ml-1">标签</span>
+                  </div>
+                  <div className="flex flex-wrap">
+                    <span
+                      className="
+                        inline-block m-1 px-2 pb-0.5 text-sm text-white rounded-md 
+                        cursor-pointer transition duration-300 ease-in-out transform hover:scale-105
+                      "
+                      style={{"backgroundColor": randomColor()}}
+                      onClick={() => {props.handleToEditControl('all')}}
+                    >
+                      全部
+                    </span> 
+                    { props.labelList.map((item) => {
+                      return(
+                        <span
+                          className="
+                            inline-block m-1 px-2 pb-0.5 text-sm text-white rounded-md 
+                            cursor-pointer transition duration-300 ease-in-out transform hover:scale-105
+                          "
+                          style={{"backgroundColor": randomColor()}}
+                          key={item}
+                          onClick={() => {props.handleToEditControl(item)}}
+                        >
+                          {item}
+                        </span>
+                      )
+                    })}
+                  </div>
+                </div>
+              </>
             ) : (
-              <div className="text-lg text-blue-900 text-center py-4 border-b border-gray-300">
+              <div className="text-lg text-blue-900 text-center py-4">
                 <i 
                   className="mr-1 iconfont icon-like-round" 
                   style={{"fontSize": "1.2rem"}}  
@@ -103,18 +150,6 @@ const adminUI = (props) => {
               </div>
             )
           }
-          <div className="my-3">
-            <i 
-              className="iconfont icon-fenlei" 
-              style={{"fontSize": "1.1rem"}}  
-            />
-            <span className="ml-1">分类</span>
-          </div>
-          <ul>
-            <li>1</li>
-            <li>2</li>
-            <li>3</li>
-          </ul>
           <div 
             className="
               mx-12 mt-6 mb-4 py-1 text-base cursor-pointer text-center rounded-md shadow
@@ -131,7 +166,7 @@ const adminUI = (props) => {
                   mx-12 mb-6 mt-4 py-1 text-base cursor-pointer text-center rounded-md shadow
                   transition duration-500 ease-in-out hover:text-blue-500 transform hover:scale-105
                 "
-                onClick={props.handleToEdit}
+                onClick={() => {props.handleToEditControl('all')}}
               >
                 编辑我的博客
               </div>

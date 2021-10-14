@@ -2,8 +2,53 @@ import React from 'react'
 import moment from 'moment'
 
 const EditControlUI = (props) => {
+  const randomColor = () => {
+    let color="rgb(";
+    for(let i=0; i<3; i++) {
+      color += parseInt(Math.random()*256)+",";
+    } 
+    color = color.substring(0, color.length-1)+")";
+    return color
+  }
   return ( 
     <div className="max-w-screen-lg mx-auto">
+      <div className="w-auto h-10 mx-20 my-10 py-1 flex  flex-wrap">
+        <span
+          className="
+            inline-block my-1 mx-1.5 px-2 text-sm text-white rounded-md cursor-pointer 
+            transition duration-300 ease-in-out transform hover:scale-105
+          "
+          style={{
+            "backgroundColor": randomColor(),
+            "--tw-scale-x": (props.label === 'all') ? "1.1" : "",
+            "--tw-scale-y": (props.label === 'all') ? "1.1" : ""
+          }}
+          onClick={() => {props.handleToEditControl('all')}}
+        >
+          all
+        </span>
+        {
+          props.labelList.map((item) => {
+            return (
+              <span
+                className="
+                  inline-block my-1 mx-1.5 px-2 text-sm text-white rounded-md cursor-pointer 
+                  transition duration-300 ease-in-out transform hover:scale-105
+                "
+                key={item}
+                style={{
+                  "backgroundColor": randomColor(), 
+                  "--tw-scale-x": (item === props.label) ? "1.1" : "",
+                  "--tw-scale-y": (item === props.label) ? "1.1" : ""
+                }}
+                onClick={() => {props.handleToEditControl(item)}}
+              >
+                {item}
+              </span>
+            )  
+          })
+        }
+      </div>
       <ul className="w-full">
         { 
           props.list.map((item, index) => {
@@ -68,7 +113,7 @@ const EditControlUI = (props) => {
                     <span
                       className="text-base ml-1"
                     >
-                      标签
+                      {item.label}
                     </span>
                   </i>
                 </div>

@@ -14,7 +14,7 @@ function App() {
         <Route exact path="/" component={Admin} />
         <Route exact path="/new" component={New} />
         <Route exact path="/detail/:id" component={Detail}/>
-        <Route exact path="/editcontrol" component={EditControl} />
+        <Route exact path="/editcontrol/:id" component={EditControl} />
         <Route exact path="/editblog/:id" component={EditBlog} />
       </BrowserRouter>
     </div>

@@ -14,7 +14,7 @@ const LoginUI = (props) => {
         </div>
         <div className="mx-4 mt-8 mb-6">
           <div className="mb-4 py-1.5 border border-blue-400 rounded-lg">
-            <i style={{"fontSize": "1rem"}} className="iconfont icon-zhanghao mr-2"/>
+            <i style={{"fontSize": "1rem"}} className="iconfont icon-zhanghao mx-2"/>
             <input 
               placeholder="请输入账号"
               className="h-6 w-48 text-base focus:outline-none"
@@ -22,7 +22,7 @@ const LoginUI = (props) => {
             />
           </div>
           <div className="mb-6 py-1.5 border border-blue-400 rounded-lg">
-            <i style={{"fontSize": "1rem"}} className="iconfont icon-mima mr-2"/> 
+            <i style={{"fontSize": "1rem"}} className="iconfont icon-mima mx-2"/> 
             <input 
               placeholder="请输入密码"
               type="password"

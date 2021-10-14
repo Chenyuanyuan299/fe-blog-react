@@ -11,6 +11,7 @@ const Admin = (props) => {
   const [ showLogin, setShowLogin ] = useState(false)
   const [ admin, setAdmin ] = useState('')
   const [ listCount, setListCount ] = useState(0)
+  const [ labelList, setLabelList ] =useState(0)
   const history = props.history
   const getHomeData = () => {
     axios.get('/api/blog/list')
@@ -20,6 +21,7 @@ const Admin = (props) => {
       setList(resData.listData)
       setAdmin(resData.realname)
       setListCount(resData.count)
+      setLabelList(resData.labelList)
       if (message === '已登录') {
         const loginState = true
         const admin = resData.realname
@@ -55,8 +57,13 @@ const Admin = (props) => {
       }
     });
   }
-  const handleToEdit = () => {
-    props.history.push('/editcontrol');
+  const handleToEditControl = (item) => {
+    props.history.push({
+      pathname:'/editcontrol/'+item,
+      state: {
+        label: item
+      }
+    });
   }
   const handleLoginClick = () => {
     setShowLogin(true)
@@ -76,11 +83,12 @@ const Admin = (props) => {
       isLogin={isLogin}
       showLogin={showLogin}
       listCount={listCount}
+      labelList={labelList}
       admin={admin}
       history={history}
       handleToNew={handleToNew}
       handleToDetail={handleToDetail}
-      handleToEdit={handleToEdit}
+      handleToEditControl={handleToEditControl}
       handleLoginClick={handleLoginClick}
       handleShowLogin={handleShowLogin}
       handleLogout={handleLogout}

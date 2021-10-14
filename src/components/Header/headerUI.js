@@ -12,7 +12,7 @@ const HeaderUI = (props) => {
       </div>
       <div className="flex justify-center items-center absolute top-3 right-40">
         <i className="iconfont icon-yanse mr-2"/>
-        <div className="align-top">
+        <div>
           <i 
             className="iconfont icon-search absolute top-1 left-10" 
             style={{"fontSize": "1.1rem"}}
@@ -23,7 +23,7 @@ const HeaderUI = (props) => {
           />
         </div>
         <div 
-          className="cursor-pointer"
+          className="cursor-pointer ml-4"
           onClick={props.handleClick}
         >
           <i 
@@ -32,14 +32,14 @@ const HeaderUI = (props) => {
           />
           <span className="text-sm">主页</span>
         </div>
-        <div className="cursor-pointer">
+        <div className="cursor-pointer ml-4">
           <i 
             className="iconfont icon-my-fill mr-0.5"
             style={{"fontSize": "1.1rem"}}
             />
           <span>contact</span>
         </div>
-        <div className="cursor-pointer">
+        <div className="cursor-pointer ml-4">
           <i 
             className="iconfont icon-tuichu mr-0.5"
             style={{"fontSize": "1.1rem"}}

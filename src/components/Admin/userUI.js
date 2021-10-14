@@ -22,7 +22,7 @@ const UserUI = (props) => {
             <h6>文章</h6>
           </div>
           <div className="text-center flex-1">
-            <h3>10</h3>
+            <h3>{props.labelCount}</h3>
             <h6>标签</h6>
           </div>
         </div>
