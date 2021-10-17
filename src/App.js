@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, BrowserRouter  } from 'react-router-dom'; 
+import { Route, BrowserRouter } from 'react-router-dom'; 
 import './style/iconfont.css'
 import Admin from './components/Admin/admin'
 import New from './components/New/new'

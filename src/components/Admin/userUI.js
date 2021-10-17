@@ -5,7 +5,11 @@ const UserUI = (props) => {
   return ( 
     <>
       <div className="pb-8 border-b border-gray-300">
-        <img className="mx-auto mt-8 mb-4 w-24 h-24 rounded-full bg-red-400" alt="头像"/>
+        <img
+          src="/img/touxiang.jpg"
+          className="mx-auto mt-8 mb-4 w-24 h-24 rounded-full" 
+          alt="头像"
+        />
         <div className="text-lg text-blue-900 text-center py-4">
           <i 
             className="mr-1 iconfont icon-like-round" 

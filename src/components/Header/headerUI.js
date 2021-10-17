@@ -7,7 +7,11 @@ const HeaderUI = (props) => {
         className="flex h-full w-48 ml-2 p-1 justify-center items-center cursor-pointer"
         onClick={props.handleClick}
       >
-        <img className="mr-4 h-10 w-10 rounded-full" alt="头像"/>
+        <img 
+          className="mr-4 h-10 w-10 rounded-full" 
+          alt="头像"
+          src="/img/touxiang.jpg"
+        />
         <span className="font-semibold">{props.realname}</span>
       </div>
       <div className="flex justify-center items-center absolute top-3 right-40">

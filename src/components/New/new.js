@@ -37,26 +37,12 @@ const New = (props) => {
     setContent(e.target.value)
   }
   // 防抖
-  const debounce = (fn, delay) => {
-    let timer
-    return function() {
-      clearTimeout(timer)
-      timer = setTimeout(() => {
-        fn.apply(this, arguments)
-      }, delay)
-    }
-  }
-  // 节流
-  // const throttle = (fn, delay) => {
-  //   let flag = true
+  // const debounce = (fn, delay) => {
+  //   let timer
   //   return function() {
-  //     if (!flag) {
-  //       return false
-  //     }
-  //     flag = false
-  //     setTimeout(() => {
+  //     clearTimeout(timer)
+  //     timer = setTimeout(() => {
   //       fn.apply(this, arguments)
-  //       flag = true
   //     }, delay)
   //   }
   // }
@@ -69,8 +55,7 @@ const New = (props) => {
       handleSendBlog={handleSendBlog}
       contentChange={contentChange}
       titleChange={titleChange}
-      debounce={debounce}
-      // throttle={throttle}
+      // debounce={debounce}
     />
   )
 }

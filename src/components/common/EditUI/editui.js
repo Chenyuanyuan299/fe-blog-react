@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 
 const EditUI = (props) => {
   const labelList = ['--请选择--', 'HTML', 'CSS', 'JavaScript', 'TypeScript', 'Nodejs', 'React', 'Vue', 'Browser', 'Network', 'WebPack']
-  // const [ label, setLabel ] = useState(labelList[0])
+  const [ label, setLabel ] = useState(labelList[0])
   const [ showlabel, setShowLabel ] = useState(false)
   const handleShowLabel = () => {
     setShowLabel(!showlabel)
   }
   const handleChangeLabel = (index) => {
-    // setLabel(labelList[index])
+    setLabel(labelList[index])
     props.setLabel(labelList[index])
     setShowLabel(false)
   }
@@ -39,7 +39,7 @@ const EditUI = (props) => {
         <div className="flex items-center justify-center">
           <div className="ml-4 w-28 h-8 rounded border-2 border-blue-200">
             <span className="inline-block h-full w-20 text-sm text-center">
-              {props.label}
+              { props.label ? props.label : label}
             </span>
             <i 
               className="iconfont icon-arrow-down-1-icon"
@@ -63,7 +63,11 @@ const EditUI = (props) => {
             发布
           </button>
           <i className="iconfont icon-qiehuan mx-2.5 text-xl text-center"></i>
-          <img alt="头像" className="mx-2.5 rounded-full bg-red-300 w-9 h-9" />
+          <img
+            src="/img/touxiang.jpg"
+            alt="头像" 
+            className="mx-2.5 rounded-full w-9 h-9" 
+          />
         </div>
       </div>
       <div 
